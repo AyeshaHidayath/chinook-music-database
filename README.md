@@ -1,6 +1,6 @@
 # Chinook database
 
-/*QUERY 1 - Return the first 10 track names (in ascending order) along with the Album title 
+/*QUERY 1 - Return the first 10 track names (in ascending order) along with the Album title
 that have a song length longer than the average song length*/
 
 SELECT al.title AS album_name, t.name AS track_name, t.Milliseconds AS milliseconds
@@ -30,12 +30,12 @@ WITH t1 AS ( SELECT a.Name AS artist_name , COUNT(il.Quantity)*(il.UnitPrice) AS
 			ON a.ArtistId = al.ArtistId
 			GROUP BY 1
 			ORDER BY 2 DESC
-			LIMIT 1 ) 
-			
-SELECT  a.name AS artist_name, c.CustomerId, c.FirstName, c.LastName, 
+			LIMIT 1 )
+
+SELECT  a.name AS artist_name, c.CustomerId, c.FirstName, c.LastName,
 		c.FirstName||' '||c.LastName AS full_name,
 		COUNT(il.Quantity)*(il.UnitPrice) AS total_spent
-        
+
 FROM Customer c
 JOIN invoice i
 ON c.CustomerId = i.CustomerId
@@ -48,18 +48,18 @@ ON al.AlbumId = t.AlbumId
 JOIN Artist a
 ON a.ArtistId = al.ArtistId
 GROUP BY 1,2,3,4
-HAVING a.Name = ( SELECT artist_name 
+HAVING a.Name = ( SELECT artist_name
 		  FROM t1)
 ORDER BY 6 DESC
-LIMIT 10; 
+LIMIT 10;
 
 
 
 /*QUERY 3 - Finding the total purchases for each Genre and  
   grouping them based on their demands using CASE statement.*/
-  
+
   SELECT  g.name AS GenreName, g.GenreId AS genreId,  COUNT(i.total) AS Purchases,
-   	CASE	WHEN COUNT(i.total) BETWEEN 0 AND 10 THEN '5 (Very Low Demand)' 
+   	CASE	WHEN COUNT(i.total) BETWEEN 0 AND 10 THEN '5 (Very Low Demand)'
 		WHEN COUNT(i.total) BETWEEN 11 AND 100 THEN '4 (Low Demand)'
 		WHEN COUNT(i.total) BETWEEN 101 AND 300 THEN '3 (Moderate Demand)'
 		WHEN COUNT(i.total) BETWEEN 301 AND 500 THEN '2 (High Demand)'
@@ -72,7 +72,7 @@ ON il.trackid = t.trackid
 JOIN invoice i
 ON i.invoiceid = il.invoiceid
 GROUP BY 1,2
-ORDER BY 2; 
+ORDER BY 2;
 
 
 
@@ -99,3 +99,4 @@ JOIN t2
 ON t1.country=t2.country AND t1.total_spent=t2.total_spent
 ORDER BY 6 DESC;
 
+/*Finish*/
