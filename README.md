@@ -76,3 +76,26 @@ ORDER BY 2;
 
 
 
+/*QUERY 4 - A query that returns the top customer from each country along with how much they spent*/
+
+WITH t1 AS (SELECT c.customerid AS customer_id, c.firstname AS first_name,c.lastname AS last_name ,
+			c.country AS country ,SUM(i.total) AS total_spent
+			FROM customer c
+			JOIN invoice i
+			ON c.customerid=i.customerid
+			GROUP BY 1,2,3,4
+			ORDER BY 4 ),
+
+	 t2 AS (SELECT country, MAX(total_spent)  AS total_spent
+		    FROM t1
+		    GROUP BY 1
+            ORDER BY 1)
+
+SELECT  t1.customer_id, t1.first_name, t1.last_name,
+		t1.first_name||' '||t1.last_name AS full_name,
+		t1.country, t1.total_spent		
+FROM t1
+JOIN t2
+ON t1.country=t2.country AND t1.total_spent=t2.total_spent
+ORDER BY 6 DESC;
+
